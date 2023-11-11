@@ -5,7 +5,11 @@ export const ImageGallery = ({ imagesList }) => {
     <ul>
       {imagesList.map(item => {
         return (
-          <ImageGalleryItem key={item.id} webformatURL={item.webformatURL} />
+          <ImageGalleryItem
+            key={item.id}
+            webformatURL={item.webformatURL}
+            largeImageURL={item.largeImageURL}
+          />
         );
       })}
     </ul>
