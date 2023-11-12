@@ -41,13 +41,12 @@ export class ImageGalleryItem extends Component {
     return (
       <li onClick={this.openModal}>
         <img src={webformatURL} alt="This is result of your search" />
-
         <Modal
           isOpen={isModalOpen}
           onRequestClose={this.closeModal}
           style={customStyles}
         >
-          <img src={largeImageURL} alt="Modal" />
+          <img src={largeImageURL} alt="This is result of your search" />
         </Modal>
       </li>
     );
