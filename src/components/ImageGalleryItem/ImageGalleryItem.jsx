@@ -1,37 +1,37 @@
 import { Component } from 'react';
-import Modal from 'react-modal';
+// import ReactModal from 'react-modal';
 
-const customStyles = {
-  content: {
-    objectFit: 'contain',
-    overflow: 'hidden',
-    maxHeight: '90vh',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+import { Modal } from 'components/Modal/Modal';
+import { ImageItem, Image } from './ImageGalleryItem.styled';
 
-Modal.setAppElement('#root');
+// const customStyles = {
+//   content: {
+//     objectFit: 'contain',
+//     overflow: 'hidden',
+//     maxHeight: '90vh',
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto',
+//     marginRight: '-50%',
+//     transform: 'translate(-50%, -50%)',
+//   },
+// };
+
+// ReactModal.setAppElement('#root');
 
 export class ImageGalleryItem extends Component {
   state = {
     isModalOpen: false,
+    a: 0,
   };
 
   openModal = () => {
-    this.setState({
-      isModalOpen: true,
-    });
+    this.setState({ isModalOpen: true });
   };
 
   closeModal = () => {
-    this.setState({
-      isModalOpen: false,
-    });
+    this.setState({ isModalOpen: false, a: 2 });
   };
 
   render() {
@@ -39,16 +39,12 @@ export class ImageGalleryItem extends Component {
     const { webformatURL, largeImageURL } = this.props;
 
     return (
-      <li onClick={this.openModal}>
-        <img src={webformatURL} alt="This is result of your search" />
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-        >
-          <img src={largeImageURL} alt="This is result of your search" />
-        </Modal>
-      </li>
+      <ImageItem onClick={this.openModal}>
+        <Image src={webformatURL} alt="This is result of your search" />
+        {isModalOpen && (
+          <Modal imageUrl={largeImageURL} closeModal={this.closeModal} />
+        )}
+      </ImageItem>
     );
   }
 }

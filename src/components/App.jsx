@@ -1,14 +1,25 @@
 import { Component } from 'react';
+import { Blocks } from 'react-loader-spinner';
+import toast, { Toaster } from 'react-hot-toast';
+import { fetchImages } from 'utils/api';
+
 import { SearchBar } from './SearchBar/SearchBar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { fetchImages } from 'utils/api';
 import { Button } from './Button/Button';
+
+const AppStyle = {
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gridGap: '16px',
+  paddingBottom: '24px',
+};
 
 export class App extends Component {
   state = {
     images: [],
     query: '',
     page: 1,
+    isLoading: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -20,6 +31,7 @@ export class App extends Component {
         const queryWithoutId = this.state.query.slice(
           this.state.query.indexOf('/') + 1
         );
+        this.setState({ isLoading: true });
 
         const fetchedImages = await fetchImages(
           queryWithoutId,
@@ -29,9 +41,14 @@ export class App extends Component {
         this.setState(prevState => {
           return {
             images: [...prevState.images, ...fetchedImages.hits],
+            loadMore: this.state.page < Math.ceil(fetchedImages.totalHits / 12),
           };
         });
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Something went wrong! Please, try again :(  ');
+      } finally {
+        this.setState({ isLoading: false });
+      }
     }
   }
 
@@ -52,15 +69,23 @@ export class App extends Component {
   };
 
   render() {
+    const { images, isLoading, loadMore } = this.state;
     return (
-      <div>
+      <div style={AppStyle}>
         <SearchBar onSubmit={this.handleSubmit} />
-        {this.state.images.length > 0 && (
-          <ImageGallery imagesList={this.state.images} />
+        {isLoading && (
+          <Blocks
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+          />
         )}
-        {this.state.images.length > 0 && (
-          <Button handleClick={this.handleLoadMore} />
-        )}
+        {images.length > 0 && <ImageGallery imagesList={images} />}
+        {loadMore && <Button handleClick={this.handleLoadMore} />}
+        <Toaster />
       </div>
     );
   }
