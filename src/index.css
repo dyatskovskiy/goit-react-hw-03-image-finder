@@ -26,12 +26,6 @@ img {
   height: auto;
 }
 
-ul {
-  display: flex;
-  max-width: 500px;
-  flex-wrap: wrap;
-}
-
 li {
   list-style: none;
 }
