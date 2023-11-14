@@ -53,6 +53,10 @@ export class App extends Component {
   }
 
   handleSubmit = query => {
+    if (!query.trim()) {
+      toast.error('Enter something to search');
+      return;
+    }
     this.setState(() => {
       return {
         images: [],
